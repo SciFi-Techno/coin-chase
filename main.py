@@ -36,7 +36,11 @@ class Main():
         coin_obj = coin.Coin()
         coin_obj.set_position(pos)
 
+        # Initialize score
+        score = 0
+
         while not pr.window_should_close():
+
             # Compute movement internally for simple controls
             pr.update_camera(camera, pr.CameraMode.CAMERA_FIRST_PERSON)
 
@@ -81,10 +85,23 @@ class Main():
                                               pr.Vector2(coin_obj.get_position_x() + 0.5, coin_obj.get_position_z() +
                                                                                           0.5),
                                               1)):
+                score += 1
                 pos = self.get_pos()
                 coin_obj.set_position(pos)
 
             pr.end_mode_3d()
+
+            # Timer and score
+            pr.draw_text(str(round(pr.get_time() // 60)) + ":" + str(round(pr.get_time() % 60)), 10, 10, 30,
+                         pr.RED)
+            pr.draw_text(str(score), 775, 10, 30, pr.BLUE)
+
+            # Game over
+            if pr.get_time() >= 10:
+                pr.gui_message_box(pr.Rectangle(pr.get_window_position().x // 2, pr.get_window_position().y // 2, 400,
+                                                300), "Game Over", "Your score was: " + str(score),
+                                   "Press 'Esc' to quit")
+
             pr.end_drawing()
 
     def get_pos(self):
